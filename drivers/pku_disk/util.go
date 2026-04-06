@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"crypto/md5"
+	"crypto/tls"
 	"encoding/hex"
 	"fmt"
 	"hash/crc32"
@@ -47,7 +48,8 @@ func newClient(oauthToken, refreshToken, idToken string) *resty.Client {
 	client := resty.New().
 		SetBaseURL(BaseURL).
 		SetTimeout(30 * time.Second).
-		SetHeader("User-Agent", "OpenList-PKU-Driver/1.1")
+		SetHeader("User-Agent", "OpenList-PKU-Driver/1.1").
+		SetTLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 	
 	jar, _ := cookiejar.New(nil)
 	client.SetCookieJar(jar)
